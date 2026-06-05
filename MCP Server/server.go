@@ -13,4 +13,9 @@ func main() {
 
         fmt.Println(line)
     }
+
+    if err := scanner.Err(); err != nil {
+        fmt.Println("There was an error scanning.")
+        os.Exit(1)
+    }
 }
