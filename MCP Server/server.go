@@ -1,21 +1,67 @@
 package main
 
 import (
-    "bufio";
-    "os";
-    "fmt"
+	"bufio"
+	"fmt"
+	"io"
+	"os"
+	"strconv"
+	"strings"
 )
 
 func main() {
-    scanner := bufio.NewScanner(os.Stdin)
-    for scanner.Scan() {
-        line := scanner.Text()
+    reader := bufio.NewReader(os.Stdin)
+    
+    for {
+        //Getting the content length 
 
-        fmt.Println(line)
+        header, _ := reader.ReadString('\n')
+        length := parseContentLength(header)
+
+        reader.ReadString('\n')
+
+        body := make([]byte, length)
+        io.ReadFull(reader, body)
+        
+        parseInput(body)
+
+        fmt.Println(body)
+        break;
     }
 
-    if err := scanner.Err(); err != nil {
-        fmt.Println("There was an error scanning.")
-        os.Exit(1)
+    // General flow:
+    /*
+        Receive input
+        Parse into one of the classes
+        determine type of input
+            - req
+            - notif
+            - i cant remember the other ones lol XD
+        
+        if req
+            process
+            get return value
+            put it into class
+            parse into json-formatted string
+            send it out
+    */
+}
+
+func parseContentLength(header string) int {
+    start := strings.Index(header, " ")
+    end := strings.Index(header, "\r")
+
+    conLen := header[start:end]
+    num, err := strconv.Atoi(conLen)
+
+    if err != nil {
+        fmt.Printf("Error", err)
+        return -1
     }
+
+    return num
+}
+
+func parseInput(a []byte) []byte {
+    return a
 }
