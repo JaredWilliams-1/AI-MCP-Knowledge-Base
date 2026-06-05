@@ -25,7 +25,7 @@ type MCPRequest struct {
 type MCPResponse struct {
 	JSONRPC string           `json:"jsonrpc"`
 	ID      int              `json:"id"`
-	Result  *json.RawMessage `json:"result,omitempty"`
+	Result  *InitializeResult `json:"result,omitempty"`
 	Error   *MCPError        `json:"error,omitempty"`
 }
 
