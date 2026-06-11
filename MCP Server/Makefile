@@ -2,7 +2,7 @@ server:
 	go build -o ../bin/server .
 
 test:
-	go test ./tests/initialize_test.go
+	go test ./...
 
 run: server
 	../bin/server

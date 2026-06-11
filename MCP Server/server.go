@@ -2,8 +2,10 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -31,8 +33,11 @@ func main() {
         
         fmt.Println("3")
 
-        input := parseInput(body) // input is parsed into one of the classes
-        input = input // remove this later it was just to get rid of errors
+        MCPReq := parseInput(body) // input is parsed into one of the classes
+        
+        if MCPReq.Method == "initialize" {
+            initializeHandler(MCPReq)
+        }
 
         fmt.Println(body)
         break;
@@ -66,15 +71,32 @@ func parseContentLength(header string) int {
     num, err := strconv.Atoi(conLen)
 
     if err != nil {
-        fmt.Printf("Error", err)
+        fmt.Printf("Error: %v", err)
         return -1
     }
 
     return num
 }
 
-func parseInput(a []byte) []byte {
-    inputStr := (string)(a)
+func parseInput(input []byte) MCPRequest {
+    var req MCPRequest
+    err := json.Unmarshal(input, &req)
 
-    return ([]byte)(inputStr) // temporary
+    if err != nil {
+        log.Fatalf("Error parsing JSON: %v", input)
+    }
+    return req
+}
+
+func initializeHandler(MCPReq MCPRequest) {
+    //parse the intialize parameters here and respond
+    var initParams InitializeParams
+
+    err := json.Unmarshal(MCPReq.Params, &initParams)
+    if err != nil {
+        log.Fatalf("Error parsing JSON: %v", MCPReq.Params)
+    }
+
+    // TODO: Add the rest of the stuff
+    // for now imma just print out the version number to check whether things are working
 }
