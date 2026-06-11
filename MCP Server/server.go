@@ -10,20 +10,29 @@ import (
 )
 
 func main() {
+    fmt.Println("HI")
+
     reader := bufio.NewReader(os.Stdin)
     
     for {
         //Getting the content length 
 
+        fmt.Println("1")
+
         header, _ := reader.ReadString('\n')
         length := parseContentLength(header)
+
+        fmt.Println("2")
 
         reader.ReadString('\n')
 
         body := make([]byte, length)
         io.ReadFull(reader, body)
         
-        parseInput(body)
+        fmt.Println("3")
+
+        input := parseInput(body) // input is parsed into one of the classes
+        input = input // remove this later it was just to get rid of errors
 
         fmt.Println(body)
         break;
@@ -48,10 +57,12 @@ func main() {
 }
 
 func parseContentLength(header string) int {
+
     start := strings.Index(header, " ")
     end := strings.Index(header, "\r")
+    // end := strings.Index(header, "a")
 
-    conLen := header[start:end]
+    conLen := header[start+1:end]
     num, err := strconv.Atoi(conLen)
 
     if err != nil {
@@ -63,5 +74,7 @@ func parseContentLength(header string) int {
 }
 
 func parseInput(a []byte) []byte {
-    return a
+    inputStr := (string)(a)
+
+    return ([]byte)(inputStr) // temporary
 }
