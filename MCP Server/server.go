@@ -37,10 +37,12 @@ func main() {
         
         if MCPReq.Method == "initialize" {
             initializeHandler(MCPReq)
+        } else if MCPReq.Method == "initialized" {
+            initializedHandler(MCPReq)
         }
 
         fmt.Println(body)
-        break;
+        break; 
     }
 
     // General flow:
@@ -60,6 +62,9 @@ func main() {
             send it out
     */
 }
+
+
+// ======== Functions for parsing input ========
 
 func parseContentLength(header string) int {
 
@@ -88,6 +93,8 @@ func parseInput(input []byte) MCPRequest {
     return req
 }
 
+// ======== Handlers ========
+
 func initializeHandler(MCPReq MCPRequest) {
     //parse the intialize parameters here and respond
     var initParams InitializeParams
@@ -97,6 +104,43 @@ func initializeHandler(MCPReq MCPRequest) {
         log.Fatalf("Error parsing JSON: %v", MCPReq.Params)
     }
 
-    // TODO: Add the rest of the stuff
-    // for now imma just print out the version number to check whether things are working
+    // For now I am not actually taking the negotiation into account
+    initRes := InitializeResult{
+        ProtocolVersion: "2024-11-05",
+        Capabilities: ServerCapabilities{
+            Logging: struct{}{},
+            Prompts: ServerPromptsCapability{
+                ListChanged: true,
+            },
+            Resources: ServerResourcesCapability{
+                Subscribe: true,
+                ListChanged: true,
+            },
+            Tools: ServerToolsCapability{
+                ListChanged: true,
+            },
+            Tasks: ServerTasksCapability{
+                List:   struct{}{},
+                Cancel: struct{}{},
+                Requests: ServerTaskRequests{
+                    Tools: ServerTaskToolRequests{
+                        Call: struct{}{},
+                    },
+                },
+            },
+        },
+        ServerInfo: ServerInfo{
+            Name: "Knowledge Server",
+            Title: "Title",
+            Version: "1.0.0",
+            Description: "Store and retrieve information in text format",
+            WebsiteURL: "www.example.com",
+        },
+    }
+
+    // TODO: put everything in the proper response body and Send the response
+}
+
+func initializedHandler(MCPReq MCPRequest) {
+    //TODO: Implement this. It should not return anything
 }

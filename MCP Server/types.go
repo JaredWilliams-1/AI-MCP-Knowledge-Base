@@ -134,6 +134,6 @@ type ServerInfo struct {
 	Title       string `json:"title"`
 	Version     string `json:"version"`
 	Description string `json:"description"`
-	Icons       []Icon `json:"icons"`
+	Icons       []Icon `json:"icons, omitempty"`
 	WebsiteURL  string `json:"websiteUrl"`
 }
