@@ -19,19 +19,13 @@ func main() {
     for {
         //Getting the content length 
 
-        fmt.Println("1")
-
         header, _ := reader.ReadString('\n')
         length := parseContentLength(header)
-
-        fmt.Println("2")
 
         reader.ReadString('\n')
 
         body := make([]byte, length)
         io.ReadFull(reader, body)
-        
-        fmt.Println("3")
 
         MCPReq := parseInput(body) // input is parsed into one of the classes
         
@@ -138,7 +132,16 @@ func initializeHandler(MCPReq MCPRequest) {
         },
     }
 
-    // TODO: put everything in the proper response body and Send the response
+    MCPRes := MCPResponse{
+        JSONRPC: "2.0",
+        ID: 1,
+        Result: &initRes,
+    }
+
+    body, err := json.Marshal(MCPRes)
+
+    fmt.Fprintf(os.Stdout, "Content-Length: %d\r\n\r\n", len(body))
+    os.Stdout.Write(body)
 }
 
 func initializedHandler(MCPReq MCPRequest) {
