@@ -98,7 +98,7 @@ func initializeHandler(MCPReq MCPRequest) {
         log.Fatalf("Error parsing JSON: %v", MCPReq.Params)
     }
 
-    // For now I am not actually taking the negotiation into account
+
     initRes := InitializeResult{
         ProtocolVersion: "2024-11-05",
         Capabilities: ServerCapabilities{
@@ -145,5 +145,5 @@ func initializeHandler(MCPReq MCPRequest) {
 }
 
 func initializedHandler(MCPReq MCPRequest) {
-    //TODO: Implement this. It should not return anything
+    fmt.Print("Initialized.")
 }
