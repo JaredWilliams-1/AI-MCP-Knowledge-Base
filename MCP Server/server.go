@@ -28,10 +28,11 @@ func main() {
         io.ReadFull(reader, body)
 
         MCPReq := parseInput(body) // input is parsed into one of the classes
-        
-        if MCPReq.Method == "initialize" {
+
+        switch MCPReq.Method {
+        case "initialize":
             initializeHandler(MCPReq)
-        } else if MCPReq.Method == "initialized" {
+        case "initialized":
             initializedHandler(MCPReq)
         }
 
