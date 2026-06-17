@@ -16,10 +16,13 @@ func main() {
 
     reader := bufio.NewReader(os.Stdin)
     
-    for {
-        //Getting the content length 
+    for {       
 
-        header, _ := reader.ReadString('\n')
+        //Getting the content length 
+        header, err := reader.ReadString('\n')
+        if (err == io.EOF){
+            return
+        }
         length := parseContentLength(header)
 
         reader.ReadString('\n')
@@ -37,25 +40,7 @@ func main() {
         }
 
         fmt.Println(body)
-        break; 
     }
-
-    // General flow:
-    /*
-        Receive input
-        Parse into one of the classes
-        determine type of input
-            - req
-            - notif
-            - i cant remember the other ones lol XD
-        
-        if req
-            process
-            get return value
-            put it into class
-            parse into json-formatted string
-            send it out
-    */
 }
 
 
@@ -65,7 +50,6 @@ func parseContentLength(header string) int {
 
     start := strings.Index(header, " ")
     end := strings.Index(header, "\r")
-    // end := strings.Index(header, "a")
 
     conLen := header[start+1:end]
     num, err := strconv.Atoi(conLen)
